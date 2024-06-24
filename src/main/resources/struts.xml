@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.objectFactory" value="spring"/>
+
+    <package name="userManagement" namespace="/" extends="struts-default">
+        <!-- Default action -->
+        <default-action-ref name="index"/>
+
+        <!-- Action configurations and global results -->
+        <global-results>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </global-results>
+
+        <!-- Global Exception Mappings for this package -->
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+            <exception-mapping exception="org.springframework.dao.DataIntegrityViolationException" result="error"/>
+            <exception-mapping exception="javax.validation.ConstraintViolationException" result="error"/>
+            <exception-mapping exception="javassist.NotFoundException" result="error"/>
+            <exception-mapping exception="java.lang.SecurityException" result="error"/>
+        </global-exception-mappings>
+
+        <!-- Index action -->
+        <action name="index">
+            <result name="success">/index.jsp</result>
+        </action>
+
+        <!-- Login action -->
+        <action name="login" class="com.rishabhsoft.controller.LoginAction">
+            <result name="input">/WEB-INF/jsp/login.jsp</result>
+            <result name="success" type="redirectAction">userManagement</result>
+        </action>
+
+        <!-- Logout action -->
+        <action name="logout" class="com.rishabhsoft.controller.LogoutAction">
+            <result name="success" type="redirectAction">login</result>
+        </action>
+
+        <!-- Signup Action -->
+        <action name="signup" class="com.rishabhsoft.controller.SignUpAction" method="signUp">
+            <result name="input">/WEB-INF/jsp/signup.jsp</result>
+            <result name="success" type="redirectAction">login</result>
+        </action>
+
+        <!-- User Management Action - Display user management page -->
+        <action name="userManagement" class="com.rishabhsoft.controller.UserManagementAction" method="display">
+            <result name="success">/WEB-INF/jsp/userManagement.jsp</result>
+        </action>
+
+        <!-- User listing action -->
+        <action name="listUsers" class="com.rishabhsoft.controller.UserManagementAction" method="listUsers">
+            <result name="success">/WEB-INF/jsp/userListing.jsp</result>
+        </action>
+
+        <!-- Add User Action -->
+        <action name="addUser" class="com.rishabhsoft.controller.UserManagementAction" method="addUser">
+            <result name="input">/WEB-INF/jsp/addUser.jsp</result>
+            <result name="success" type="redirectAction">listUsers</result>
+        </action>
+
+        <!-- Delete user action -->
+        <action name="deleteUser" class="com.rishabhsoft.controller.UserManagementAction" method="deleteUser">
+            <result name="success" type="redirectAction">listUsers</result>
+        </action>
+
+        <!-- Global Exception Handler Action -->
+        <action name="globalExceptionHandlerAction" class="com.rishabhsoft.exception.GlobalExceptionHandlerAction">
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </action>
+
+    </package>
+</struts>
